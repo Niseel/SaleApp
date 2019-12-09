@@ -1,0 +1,168 @@
+﻿
+@model SaleApp.ViewModels.IndexVm
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Products</h1>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+
+
+<form asp-action="Index" method="get">
+    <p>
+        Category:
+        <select asp-for="category" asp-items="Model.category">
+            <option value="">All</option>
+        </select>
+
+        |
+
+        Brand:
+        <select asp-for="brand" asp-items="Model.brand">
+            <option value="">All</option>
+        </select>
+
+        |
+
+        Status:
+        <select asp-for="Status">
+            <option value="null" selected="selected">All</option>
+            <option value="0">Unavailable</option>
+            <option value="1">Availability</option>
+
+        </select>
+
+        |
+
+        Name:
+        <input type="text" name="searchString" asp-for="SearchString" />
+        <input type="submit" value="Filter" class="btn btn-outline-info" /> |
+        <a asp-action="Index">Back to Full List</a>
+    </p>
+
+    <h4>Total Product: @Model.Total</h4>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].Sale)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].BrandName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].CategoryName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].Status)
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model.Products)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sale)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BrandName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CategoryName)
+                    </td>
+                    <td>
+                        @if (item.Status == 1)
+                        {
+                            <b class="text-success">Availability</b>
+                        }
+                        else
+                        {
+                            <b class="text-danger">Unavailable</b>
+                        }
+
+                        @*@Html.DisplayFor(modelItem => item.Status)*@
+                    </td>
+                    <td>
+                        <a asp-controller="Products" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                        <a asp-controller="Products" asp-action="Detail" asp-route-id="@item.ID">Details</a> |
+                        @*<a asp-controller="Products" asp-action="Delete" asp-route-id="@item.ID">Delete</a>*@
+                        Delete
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @{
+        var preDisabled = !Model.Products.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.Products.HasNextPage ? "disabled" : "";
+    }
+    <div class="container">
+        <a asp-controller="Products" asp-action="Index"
+           asp-route-pageIndex="@(Model.Products.PageIndex - 1)"
+           class="btn btn-default @preDisabled">Previous</a>
+
+        <a asp-controller="Products" asp-action="Index"
+           asp-route-pageIndex="@(Model.Products.PageIndex - 1)"
+           class="btn btn-default @preDisabled">
+            @if (Model.Products.PageIndex != 1)
+            {@(Model.Products.PageIndex - 1)}
+        else
+        { <span>_</span>}
+        </a> |
+        <a href="#" class="btn btn-default disabled">@Model.Products.PageIndex</a> |
+        <a asp-controller="Products" asp-action="Index"
+           asp-route-pageIndex="@(Model.Products.PageIndex + 1)"
+           class="btn btn-default @nextDisabled">@(Model.Products.PageIndex + 1)</a>
+
+        <a asp-controller="Products" asp-action="Index"
+           asp-route-pageIndex="@(Model.Products.PageIndex + 1)"
+           class="btn btn-default @nextDisabled">Next</a>
+    </div>
+
+    <div>
+        <select asp-for="PageSize" class="form-control">
+            @*onchange="location = this.value">*@
+            @for (int i = 5; i <= 15; i = i + 5)
+            {
+                <option value="@i" selected="@(i == @ViewBag.pageSize)">
+                    Show: @i
+                </option>
+            }
+        </select>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $("select[name='brand']").removeAttr('multiple');
+            $("select[name='category']").removeAttr('multiple');
+        });
+    </script>
+}

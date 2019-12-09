@@ -1,0 +1,152 @@
+﻿
+@model SaleApp.ViewModels.IndexVm
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>User</h1>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-action="Index" method="get">
+    <p>
+
+        Name:
+        <input type="text" name="searchString" asp-for="SearchString" />
+        <input type="submit" value="Filter" class="btn btn-outline-info" /> |
+        <a asp-action="Index">Back to Full List</a>
+
+        |
+
+        Status:
+        <select asp-for="Status">
+            <option value="null" selected="selected">All</option>
+            <option value="0">Unavailable</option>
+            <option value="1">Availability</option>
+
+        </select>
+
+    </p>
+
+    <h4>Total Product: @Model.Total</h4>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].Birth)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].Mail)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users[0].Status)
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model.Users)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Birth)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Mail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @if (item.Status == 1)
+                    {
+                        <b class="text-success">Availability</b>
+                    }
+                    else
+                    {
+                        <b class="text-danger">Unavailable</b>
+                    }
+
+                    @*@Html.DisplayFor(modelItem => item.Status)*@
+                </td>
+                <td>
+                    <a asp-controller="Users" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-controller="Users" asp-action="Detail" asp-route-id="@item.ID">Details</a> |
+                    @*<a asp-controller="Users" asp-action="Delete" asp-route-id="@item.ID">Delete</a>*@
+                    Delete
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+    @{
+        var preDisabled = !Model.Users.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.Users.HasNextPage ? "disabled" : "";
+    }
+    <div class="container">
+        <a asp-area="Admin" asp-controller="Users" asp-action="Index"
+           asp-route-pageIndex="@(Model.Users.PageIndex - 1)"
+           class="btn btn-default @preDisabled">Previous</a>
+
+        <a asp-area="Admin" asp-controller="Users" asp-action="Index"
+           asp-route-pageIndex="@(Model.Users.PageIndex - 1)"
+           class="btn btn-default @preDisabled">
+            @if (Model.Users.PageIndex != 1)
+            {@(Model.Users.PageIndex - 1)}
+        else
+        { <span>_</span>}
+        </a> |
+        <a href="#" class="btn btn-default disabled">@Model.Users.PageIndex</a> |
+        <a asp-area="Admin" asp-controller="Users" asp-action="Index"
+           asp-route-pageIndex="@(Model.Users.PageIndex + 1)"
+           class="btn btn-default @nextDisabled">@(Model.Users.PageIndex + 1)</a>
+
+        <a asp-area="Admin" asp-controller="Users" asp-action="Index"
+           asp-route-pageIndex="@(Model.Users.PageIndex + 1)"
+           class="btn btn-default @nextDisabled">Next</a>
+    </div>
+
+    <div>
+        <select asp-for="PageSize" class="form-control">
+            @*onchange="location = this.value">*@
+            @for (int i = 5; i <= 15; i = i + 5)
+            {
+                <option value="@i" selected="@(i == @ViewBag.pageSize)">
+                    Show: @i
+                </option>
+            }
+        </select>
+    </div>
+</form>
+

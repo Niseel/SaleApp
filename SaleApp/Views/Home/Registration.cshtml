@@ -1,0 +1,79 @@
+﻿@model SaleApp.ViewModels.CustomerCreateVm
+
+@{
+    ViewData["Title"] = "Account";
+}
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Register</h1>
+                <nav class="d-flex align-items-center">
+                    <a asp-controller="Home" asp-action="Index">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a asp-controller="Home" asp-action="Registration">Register</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+<!--================Login Box Area =================-->
+<section class="login_box_area section_gap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="login_box_img">
+                    <img class="img-fluid" src="~/img/login.jpg" alt="">
+                    <div class="hover">
+                        <h4>If you already have an account</h4>
+                        <p>Log in now and shop with us</p>
+                        <a class="primary-btn" asp-controller="Home" asp-action="Login">Login to Shopping</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="login_form_inner">
+                    <h3>Register Your Account</h3>
+                    <form class="row login_form" asp-controller="Home" asp-action="Registration">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="col-md-12 form-group">
+                            <input asp-for="FirstName" class="form-control" placeholder="First Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'First Name'">
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <input asp-for="LastName" class="form-control" placeholder="Last Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Last Name'">
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <input asp-for="Mail" class="form-control" placeholder="Mail" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Mail'">
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="creat_account">
+                                <input type="checkbox">
+                                <label for="f-option2">Keep me logged in</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <button type="submit" value="submit" class="primary-btn">Registration</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@if (ViewBag.check == 1)
+{
+    @section Scripts {
+        <script>
+            var r = confirm("PCongratulation! Register an account successfully\nClick OK to redirect Login Page");
+            if (r == true) {
+              window.location.href = "/Home/Login";
+            }
+        </script>
+    }
+}
+<!--================End Login Box Area ================= -->
