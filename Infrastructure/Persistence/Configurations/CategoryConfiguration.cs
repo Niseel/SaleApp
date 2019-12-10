@@ -28,8 +28,7 @@ namespace Infrastructure.Persistence.Configurations
 
             builder.Property(m => m.Status)
                 .IsRequired()
-                .HasColumnType("smallint")
-                .HasDefaultValue(1);
+                .HasColumnType("smallint");
 
             builder.Property(m => m.Created_at)
                 .IsRequired()

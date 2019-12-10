@@ -360,3 +360,4 @@ C:\Users\THANH\source\repository\SaleApp\obj\Debug\netcoreapp3.0\SaleApp.Views.p
 C:\Users\THANH\source\repository\SaleApp\obj\Debug\netcoreapp3.0\SaleApp.csproj.CopyComplete
 C:\Users\THANH\source\repository\SaleApp\obj\Debug\netcoreapp3.0\SaleApp.dll
 C:\Users\THANH\source\repository\SaleApp\obj\Debug\netcoreapp3.0\SaleApp.pdb
+C:\Users\THANH\source\repository\SaleApp\obj\Debug\netcoreapp3.0\Razor\Views\Home\Login.cshtml.g.cs

@@ -5,6 +5,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System.Security.Cryptography;
+using SaleApp;
 
 namespace Infrastructure.Persistence.Repositories
 {
@@ -59,6 +61,50 @@ namespace Infrastructure.Persistence.Repositories
             }
 
             return listResult;
+        }
+
+        public UserDto GetUser(string mail, string pasword)
+        {
+            using (MD5 md5Hash = MD5.Create())
+            {
+                string hash = MD5Hash.GetMd5Hash(md5Hash, pasword);
+
+                if (MD5Hash.VerifyMd5Hash(md5Hash, pasword, hash))
+                {
+                    var query = from p in MContext.Users
+                                where (string.Compare(p.Mail, mail) == 0)
+                                select new
+                                {
+                                    UserID = p.ID,
+                                    UserLastName = p.LastName,
+                                    UserMail = p.Mail,
+                                    UserLevel = p.Level,
+                                    UserStatus = p.Status
+                                };
+                    var item = query.First();
+                    if (item == null)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        UserDto user = new UserDto()
+                        {
+                            ID = item.UserID,
+                            LastName = item.UserLastName,
+                            Mail = item.UserMail,
+                            Level = item.UserLevel,
+                            Status = item.UserStatus
+                        };
+                        return user;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
         }
 
         protected SaleContext MContext

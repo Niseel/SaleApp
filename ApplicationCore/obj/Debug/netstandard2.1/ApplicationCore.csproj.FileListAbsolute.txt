@@ -6,3 +6,11 @@ C:\Users\THANH\source\repos\ApplicationCore\obj\Debug\netstandard2.1\Application
 C:\Users\THANH\source\repos\ApplicationCore\bin\Debug\netstandard2.1\ApplicationCore.pdb
 C:\Users\THANH\source\repos\ApplicationCore\obj\Debug\netstandard2.1\ApplicationCore.dll
 C:\Users\THANH\source\repos\ApplicationCore\obj\Debug\netstandard2.1\ApplicationCore.pdb
+C:\Users\THANH\source\repository\ApplicationCore\bin\Debug\netstandard2.1\ApplicationCore.deps.json
+C:\Users\THANH\source\repository\ApplicationCore\bin\Debug\netstandard2.1\ApplicationCore.dll
+C:\Users\THANH\source\repository\ApplicationCore\bin\Debug\netstandard2.1\ApplicationCore.pdb
+C:\Users\THANH\source\repository\ApplicationCore\obj\Debug\netstandard2.1\ApplicationCore.csprojAssemblyReference.cache
+C:\Users\THANH\source\repository\ApplicationCore\obj\Debug\netstandard2.1\ApplicationCore.AssemblyInfoInputs.cache
+C:\Users\THANH\source\repository\ApplicationCore\obj\Debug\netstandard2.1\ApplicationCore.AssemblyInfo.cs
+C:\Users\THANH\source\repository\ApplicationCore\obj\Debug\netstandard2.1\ApplicationCore.dll
+C:\Users\THANH\source\repository\ApplicationCore\obj\Debug\netstandard2.1\ApplicationCore.pdb

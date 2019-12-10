@@ -87,6 +87,7 @@ namespace SaleApp.Controllers
                 Birth = model.Birth,
                 Address = model.Address,
                 Phone = model.Phone,
+                Status = model.Status,
                 Level = model.Level,
                 Note = model.Note,
                 AvtPath = uniqueFileName

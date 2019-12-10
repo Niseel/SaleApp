@@ -59,5 +59,9 @@ namespace ApplicationCore.Services
             _unitOfWork.Complete();
         }
 
+        public UserDto GetUser(string mail, string password)
+        {
+            return _unitOfWork.Users.GetUser(mail, password);
+        }
     }
 }

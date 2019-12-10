@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using ApplicationCore.DTOs;
 using ApplicationCore.Interfaces;
+using ApplicationCore.Session;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SaleApp.Interfaces;
@@ -56,6 +57,49 @@ namespace SaleApp.Controllers
         public IActionResult Login()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(CustomerLoginVm model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var customer = _serviceCustomer.GetUser(model.CustomerMail, model.CustomerPassword);
+            if (customer == null)
+            {
+                return NotFound();
+                //Account doesnt exist
+                //Change to Product Envairoment when deploy
+            }
+            if (customer.Status == 0)
+            {
+                ViewBag.log = 0; 
+                return View();
+                //locked
+            }
+            else
+            {
+                LoginSession login = new LoginSession()
+                {
+                    LoginID = customer.ID,
+                    LoginName = customer.LastName,
+                    LoginMail = customer.Mail,
+                    LoginLevel = customer.Level,
+                    LoginStatus = customer.Status
+                };
+                if (login.LoginLevel == 1)
+                {
+                    ViewBag.log = 1;
+                    return View();
+                }
+                else
+                {
+                    ViewBag.log = 2;
+                    return RedirectToAction("Users", "Admin");
+                }
+            }
         }
 
         [HttpGet]
