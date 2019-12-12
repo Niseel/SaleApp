@@ -68,45 +68,54 @@ namespace Infrastructure.Persistence.Repositories
             using (MD5 md5Hash = MD5.Create())
             {
                 string hash = MD5Hash.GetMd5Hash(md5Hash, pasword);
-
-                if (MD5Hash.VerifyMd5Hash(md5Hash, pasword, hash))
-                {
-                    var query = from p in MContext.Users
-                                where (string.Compare(p.Mail, mail) == 0)
-                                select new
-                                {
-                                    UserID = p.ID,
-                                    UserLastName = p.LastName,
-                                    UserMail = p.Mail,
-                                    UserLevel = p.Level,
-                                    UserStatus = p.Status
-                                };
-                    var item = query.First();
-                    if (item == null)
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        UserDto user = new UserDto()
-                        {
-                            ID = item.UserID,
-                            LastName = item.UserLastName,
-                            Mail = item.UserMail,
-                            Level = item.UserLevel,
-                            Status = item.UserStatus
-                        };
-                        return user;
-                    }
-                }
-                else
+                var query = from p in MContext.Users
+                            where (string.Compare(p.Mail, mail) == 0) && (string.Compare(p.Password, hash) == 0)
+                            select new
+                            {
+                                UserID = p.ID,
+                                UserLastName = p.LastName,
+                                UserFirstName = p.FirstName,
+                                UserMail = p.Mail,
+                                UserLevel = p.Level,
+                                UserStatus = p.Status
+                            };
+                if (!query.Any())
                 {
                     return null;
                 }
+                else
+                {
+                    var item = query.First();
+                    UserDto user = new UserDto()
+                    {
+                        ID = item.UserID,
+                        LastName = item.UserLastName,
+                        FirstName = item.UserFirstName,
+                        Mail = item.UserMail,
+                        Level = item.UserLevel,
+                        Status = item.UserStatus
+                    };
+                    return user;
+                }
             }
-
         }
 
+        public UserDto GetUser(string mail)
+        {
+            var query = from p in MContext.Users
+                        where (string.Compare(p.Mail, mail) == 0)
+                        select p;
+            var item = query.First();
+            if (item == null)
+            {
+                return null;
+            }
+            else
+            {
+                UserDto user = new UserDto();
+                return user;
+            }
+        }
         protected SaleContext MContext
         {
             get { return Context as SaleContext; }

@@ -71,7 +71,18 @@
         <script>
             var r = confirm("PCongratulation! Register an account successfully\nClick OK to redirect Login Page");
             if (r == true) {
-              window.location.href = "/Home/Login";
+                window.location.href = "/Home/Login";
+            }
+        </script>
+    }
+}
+@if (ViewBag.check == 0)
+{
+    @section Scripts {
+        <script>
+            var r = confirm("This mail has been used\nClick OK to redirect Registration Page");
+            if (r == true) {
+                window.location.href = "/Home/Registration";
             }
         </script>
     }

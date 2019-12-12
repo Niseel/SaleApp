@@ -53,8 +53,27 @@ namespace SaleApp.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var x = _productService.GetList();
+                ViewBag.BrandList = x.BrandList;
+                ViewBag.CategoryList = x.CategoryList;
+                ViewBag.StatusList = x.StatusList;
                 return View();
             }
+
+            var products = _service.GetAll();
+            foreach (ProductDto item in products)
+            {
+                if (item.Name.ToLower() == model.Name.ToLower())
+                {
+                    var x = _productService.GetList();
+                    ViewBag.BrandList = x.BrandList;
+                    ViewBag.CategoryList = x.CategoryList;
+                    ViewBag.StatusList = x.StatusList;
+                    ViewBag.ProductDuplicateErrorMessage = "Error";
+                    return View();
+                }
+            }
+
             string uniqueFileName = ProcessUploadedFile(model);
 
             SaveProductDto saveProductDto = new SaveProductDto()
@@ -131,12 +150,27 @@ namespace SaleApp.Controllers
             ViewBag.StatusList = x.StatusList;
             return View(ProductEditVM);
         }
+
         [HttpPost]
         [Obsolete]
         public IActionResult Edit(ProductEditVm model)
         {
             if (ModelState.IsValid)
             {
+                var products = _service.GetAll();
+                foreach (ProductDto item in products)
+                {
+                    if (model.Name.ToLower().Equals(item.Name.ToLower()) && model.ID != item.ID)
+                    {
+                        var x = _productService.GetList();
+                        ViewBag.BrandList = x.BrandList;
+                        ViewBag.CategoryList = x.CategoryList;
+                        ViewBag.StatusList = x.StatusList;
+                        ViewBag.ProductEditUnchangedErrorMessage = "Error";
+                        return View(model);
+                    }
+                }
+
                 ProductDto productDto = _service.GetProduct(model.ID);
                 SaveProductDto saveProductDto = _mapper.Map<ProductDto, SaveProductDto>(productDto);
                 saveProductDto.Name = model.Name;

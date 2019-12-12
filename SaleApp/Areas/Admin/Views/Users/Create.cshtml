@@ -4,14 +4,15 @@
     ViewData["Title"] = "Create";
 }
 
+@*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.1.2/tailwind.min.css">*@
 <h1>Create</h1>
+
 <h4>User</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form enctype="multipart/form-data" asp-controller="Users" asp-action="Create">
-
-            <div asp-validation-summary="All" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
                 <input asp-for="LastName" class="form-control" />
@@ -27,38 +28,23 @@
                 <input asp-for="Mail" class="form-control" />
                 <span asp-validation-for="Mail" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" type="password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
+            @if (ViewBag.MailDuplicateErrorMessage != null)
+            {
+                <div class="alert alert-error text-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <p><strong>Warning!</strong> This email is already in use!!</p>
+                </div>
+            }
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
                 <input asp-for="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                <label asp-for="Birth" class="control-label"></label>
-                <input asp-for="Birth" type="date" value="2011-08-19" class="form-control">
-                <span asp-validation-for="Birth" class="text-danger"></span>
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-
-
-            <div class="form-group">
-                <label asp-for="Level" class="control-label"></label>
-                <select asp-for="Level" class="form-control">
-                    <option value="1">Customer</option>
-                    <option value="2">Maneger</option>
-                </select>
-                <span asp-validation-for="Level" class="text-danger"></span>
-            </div>
-
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
                 <select asp-for="Status" asp-items="ViewBag.StatusList" class="form-control">
@@ -69,7 +55,38 @@
                 <label asp-for="Note" class="control-label"></label>
                 <textarea asp-for="Note" class="form-control" rows="5"></textarea>
             </div>
-
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            @if (ViewBag.PhoneDuplicateErrorMessage != null)
+            {
+                <div class="alert alert-error text-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <p><strong>Warning!</strong> This phone number is already in use!!</p>
+                </div>
+            }
+            <div class="form-group">
+                <label asp-for="Birth" class="control-label"></label>
+                <input asp-for="Birth" type="date" value="1970-01-01" class="form-control">
+                <span asp-validation-for="Birth" class="text-danger"></span>
+            </div>
+            @if (ViewBag.AgeErrorMessage != null)
+            {
+                <div class="alert alert-error text-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <p><strong>Warning!</strong> User must be older than 13 or greater!</p>
+                </div>
+            }
+            <div class="form-group">
+                <label asp-for="Level" class="control-label"></label>
+                <select asp-for="Level" class="form-control">
+                    <option value="1">Customer</option>
+                    <option value="2">Maneger</option>
+                </select>
+                <span asp-validation-for="Level" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Avt" class="control-label"></label>
                 <div>

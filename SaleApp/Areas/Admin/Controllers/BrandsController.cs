@@ -119,6 +119,8 @@ namespace SaleApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            var x = _brandService.GetList();
+            ViewBag.StatusList = x.StatusList;
             return View();
         }
         [HttpPost]
@@ -127,6 +129,8 @@ namespace SaleApp.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var x = _brandService.GetList();
+                ViewBag.StatusList = x.StatusList;
                 return View();
             }
             string uniqueFileName = ProcessUploadedFile(model);
@@ -138,6 +142,18 @@ namespace SaleApp.Controllers
                 PhotoPath = uniqueFileName
 
             };
+
+            var brands = _service.GetAll();
+            foreach (BrandDto item in brands)
+            {
+                if (saveBrandDto.Name.ToLower() == item.Name.ToLower())
+                {
+                    var x = _brandService.GetList();
+                    ViewBag.StatusList = x.StatusList;
+                    ViewBag.BrandDuplicateErrorMessage = "Error! This Brand already exists";
+                    return View();
+                }
+            }
 
             _service.Add(saveBrandDto);
             return RedirectToAction("Index");
@@ -176,25 +192,39 @@ namespace SaleApp.Controllers
                 return NotFound();
             }
 
-            BrandEditVm BrandEditVM = new BrandEditVm()
+            BrandEditVm BrandEdit = new BrandEditVm()
             {
-                
+
                 Id = brand.ID,
                 Name = brand.Name,
                 Status = brand.Status,
                 ExistPhotoPath = brand.PhotoPath,
-                
-            };
 
-            return View(BrandEditVM);
-            
+            };
+            var x = _brandService.GetList();
+            ViewBag.StatusList = x.StatusList;
+            return View(BrandEdit);
+
         }
+
         [HttpPost]
         [Obsolete]
         public IActionResult Edit(BrandEditVm model)
         {
             if (ModelState.IsValid)
             {
+                var brands = _service.GetAll();
+                foreach (BrandDto item in brands)
+                {
+                    if (item.Name.ToLower().Equals(model.Name.ToLower()) && item.ID != model.Id)
+                    {
+                        var x = _brandService.GetList();
+                        ViewBag.StatusList = x.StatusList;
+                        ViewBag.BrandEditErrorMessage = "Error!";
+                        return View(model);
+                    }
+                }
+
                 BrandDto brandDto = _service.GetBrand(model.Id);
                 SaveBrandDto saveBrandDto = _mapper.Map<BrandDto, SaveBrandDto>(brandDto);
                 saveBrandDto.Name = model.Name;

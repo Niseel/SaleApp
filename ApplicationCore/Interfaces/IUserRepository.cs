@@ -10,6 +10,7 @@ namespace ApplicationCore.Interfaces
     {
         public IEnumerable<UserDto> GetAllUser(string searchString, int? status);
         public UserDto GetUser(string mail, string pasword);
+        public UserDto GetUser(string mail);
 
     }
 }

@@ -31,7 +31,7 @@ namespace SaleApp.ViewModels
         public string Password { get; set; }
         [Required(ErrorMessage = "Please input birth")]
         [Column(TypeName = "DATE")]
-        public string Birth { get; set; }
+        public DateTime Birth { get; set; }
         [Column(TypeName = "nvarchar")]
         public string Phone { get; set; }
 

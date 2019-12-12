@@ -69,8 +69,11 @@ namespace SaleApp.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var x = _userService.GetList();
+                ViewBag.StatusList = x.StatusList;
                 return View();
             }
+
             string uniqueFileName = ProcessUploadedFile(model);
             string passHash;
             using (MD5 md5Hash = MD5.Create())
@@ -92,12 +95,147 @@ namespace SaleApp.Controllers
                 Note = model.Note,
                 AvtPath = uniqueFileName
             };
+
+            //Validate duplicates
+
+            var users = _service.GetAll();
+            int DuplicateCount = 0;
+            foreach (UserDto item in users)
+            {
+                if (item.Phone == saveUserDto.Phone)
+                {
+                    ViewBag.PhoneDuplicateErrorMessage = "Error!";
+                    DuplicateCount++;
+                    break;
+                }
+            }
+            foreach (UserDto item in users)
+            {
+                if (item.Mail.ToLower() == model.Mail.ToLower())
+                {
+                    ViewBag.MailDuplicateErrorMessage = "Error!";
+                    DuplicateCount++;
+                    break;
+                }
+            }
+
+            //
+            //
+            //Validate Age >= 13
+            var age = _userService.GetAge(saveUserDto.Birth);
+            if (age < 13)
+            {
+                ViewBag.AgeErrorMessage = "Error!";
+                DuplicateCount++;
+            }
+
+
+            if (DuplicateCount > 0) //Has Error
+            {
+                var x = _userService.GetList();
+                ViewBag.StatusList = x.StatusList;
+                return View();
+            }
+
             _service.Add(saveUserDto);
             
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var user = _service.GetUser(id.Value);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            UserEditVm UserEdit = new UserEditVm()
+            {
+                ID = user.ID, // hidden
+                ExistAvtPath = user.AvtPath, // hidden
+                Password = user.Password,
+                Address = user.Address,
+                Birth = user.Birth,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Level = user.Level,
+                Mail = user.Mail,
+                Note = user.Note,
+                Phone = user.Phone,
+                Status = user.Status
+            };
+            var x = _userService.GetList();
+            ViewBag.StatusList = x.StatusList;
+            return View(UserEdit);
+        }
+
+        [HttpPost]
+        [Obsolete]
+        public IActionResult Edit(UserEditVm model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var x = _userService.GetList();
+                ViewBag.StatusList = x.StatusList;
+                return View(model);
+            }
+
+            var users = _service.GetAll();
+            int ErrorCount = 0;
+            foreach (UserDto item in users)
+            {
+                if (item.Phone == model.Phone && item.ID != model.ID)
+                {
+                    ViewBag.UserPhoneEditErrorMessage = "Error";
+                    ErrorCount++;
+                }
+            }
+            var age = _userService.GetAge(model.Birth);
+            if (age < 13)
+            {
+                ViewBag.AgeErrorMessage = "Error!";
+                ErrorCount++;
+            }
+            if (ErrorCount > 0)
+            {
+                var x = _userService.GetList();
+                ViewBag.StatusList = x.StatusList;
+                return View(model);
+            }
+
+            UserDto userDto = _service.GetUser(model.ID);
+            SaveUserDto saveUserDto = _mapper.Map<UserDto, SaveUserDto>(userDto);
+            saveUserDto.LastName = model.LastName;
+            saveUserDto.FirstName = model.FirstName;
+            saveUserDto.Address = model.Address;
+            saveUserDto.Birth = model.Birth;
+            saveUserDto.Level = model.Level;
+            saveUserDto.Mail = model.Mail;
+            saveUserDto.Note = model.Note;
+            //saveUserDto.Password = model.Password;
+            saveUserDto.Phone = model.Phone;
+            saveUserDto.Status = model.Status;
+
+            if (model.Avt != null)
+            {
+                if (model.ExistAvtPath != null)
+                {
+                    string filePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", model.ExistAvtPath);
+                    System.IO.File.Delete(filePath);
+                }
+                saveUserDto.AvtPath = ProcessUploadedFile(model);
+            }
+            _service.Update(saveUserDto);
+            return View("Detail", _service.GetUser(saveUserDto.ID));
+        }
 
         [Obsolete]
         private string ProcessUploadedFile(UserCreateVm model)

@@ -22,6 +22,7 @@ namespace SaleApp.ViewModels
         public decimal Price { get; set; }
         [Range(0, 100, ErrorMessage = "Price has range between 0 ~ 100")]
         [Column(TypeName = "int")]
+        [Required]
         public int Sale { get; set; }
         public IFormFile Image { get; set; }
         [StringLength(1000, ErrorMessage = "Content has maxium length 10000 character")]

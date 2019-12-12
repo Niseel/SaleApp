@@ -10,5 +10,6 @@ namespace SaleApp.Interfaces
     {
         IndexVm GetUserListVm(string searchString, int pageIndex = 1, int pageSize = 5, int? status = null);
         UserCreateVm GetList();
+        int GetAge(DateTime birthDate);
     }
 }

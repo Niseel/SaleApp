@@ -43,6 +43,8 @@ namespace SaleApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            var x = _categoryService.GetList();
+            ViewBag.StatusList = x.StatusList;
             return View();
         }
         [HttpPost]
@@ -51,8 +53,11 @@ namespace SaleApp.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var x = _categoryService.GetList();
+                ViewBag.StatusList = x.StatusList;
                 return View();
             }
+
             string uniqueFileName = ProcessUploadedFile(model);
 
             SaveCategoryDto saveCategoryDto = new SaveCategoryDto()
@@ -63,6 +68,19 @@ namespace SaleApp.Controllers
                 PhotoPath = uniqueFileName
 
             };
+
+            var categories = _service.GetAll();
+            foreach (CategoryDto item in categories)
+            {
+                if (saveCategoryDto.Name.ToLower() == item.Name.ToLower())
+                {
+                    var x = _categoryService.GetList();
+                    ViewBag.StatusList = x.StatusList;
+                    ViewBag.CategoryDuplicateErrorMessage = "Error";
+                    return View();
+                }
+
+            }
 
             _service.Add(saveCategoryDto);
             return RedirectToAction("Index");
@@ -110,6 +128,8 @@ namespace SaleApp.Controllers
                 ExistPhotoPath = cate.PhotoPath
             };
 
+            var x = _categoryService.GetList();
+            ViewBag.StatusList = x.StatusList;
             return View(CategoryEditVM);
 
         }
@@ -119,6 +139,18 @@ namespace SaleApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                var categories = _service.GetAll();
+                foreach (CategoryDto item in categories)
+                {
+                    if (item.Name.ToLower().Equals(model.Name.ToLower()) && item.ID != model.Id)
+                    {
+                        ViewBag.CategoryNameEditDuplicateErrorMessage = "Error";
+                        var x = _categoryService.GetList();
+                        ViewBag.StatusList = x.StatusList;
+                        return View(model);
+                    }
+                }
+
                 CategoryDto categoryDto = _service.GetCate(model.Id);
                 SaveCategoryDto saveCategoryDto = _mapper.Map<CategoryDto, SaveCategoryDto>(categoryDto);
                 saveCategoryDto.Name = model.Name;

@@ -17,24 +17,35 @@
             <input type="hidden" asp-for="ExistImagePath" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" required />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+            @if (ViewBag.ProductEditUnchangedErrorMessage != null)
+            {
+                <div class="alert alert-error text-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <p><strong>Warning!</strong> This product'name cannot be changed due to the same name as the existing product!</p>
+                </div>
+            }
+ 
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
                 <label asp-for="Sale" class="control-label"></label>
                 <input asp-for="Sale" class="form-control" />
                 <span asp-validation-for="Sale" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
                 <label asp-for="Amount" class="control-label"></label>
                 <input asp-for="Amount" class="form-control" />
                 <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
+           
             <div class="form-group">
                 <label asp-for="BrandID" class="control-label"></label>
                 <select asp-for="BrandID" asp-items="ViewBag.BrandList" class="form-control">

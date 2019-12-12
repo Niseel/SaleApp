@@ -1,7 +1,7 @@
 ﻿@model SaleApp.ViewModels.BrandEditVm
 
 @{
-    ViewData["Title"] = "Edit";    
+    ViewData["Title"] = "Edit";
     var photoPath = "~/images/brands/" + (Model.ExistPhotoPath ?? "default.png");
 }
 
@@ -20,9 +20,17 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+            @if (ViewBag.BrandEditErrorMessage != null)
+            {
+                <div class="alert alert-error text-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <p><strong>Warning!</strong> The brand name cannot be changed due to the same name as the existing brand!   </p>
+                </div>
+            }
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
+                <select asp-for="Status" asp-items="ViewBag.StatusList" class="form-control">
+                </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">

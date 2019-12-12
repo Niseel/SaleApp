@@ -7,7 +7,9 @@ using ApplicationCore.DTOs;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Session;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SaleApp.Interfaces;
 using SaleApp.ViewModels;
 
@@ -81,21 +83,31 @@ namespace SaleApp.Controllers
             }
             else
             {
-                LoginSession login = new LoginSession()
-                {
-                    LoginID = customer.ID,
-                    LoginName = customer.LastName,
-                    LoginMail = customer.Mail,
-                    LoginLevel = customer.Level,
-                    LoginStatus = customer.Status
-                };
-                if (login.LoginLevel == 1)
+                //LoginSession loginUser = new LoginSession()
+                //{
+                //    LoginID = customer.ID,
+                //    LoginName = customer.LastName,
+                //    LoginMail = customer.Mail,
+                //    LoginLevel = customer.Level,
+                //    LoginStatus = customer.Status
+                //};
+                //HttpContext.Session.SetString("SessionUser", JsonConvert.SerializeObject(loginUser));
+                //var userSession = JsonConvert.DeserializeObject<LoginSession>(HttpContext.Session.GetString("SessionUser"));
+
+                HttpContext.Session.SetInt32("LoginID", customer.ID);
+                HttpContext.Session.SetString("LoginName", customer.FirstName);
+                HttpContext.Session.SetString("LoginMail", customer.Mail);
+                HttpContext.Session.SetInt32("LoginLevel", customer.Level);
+                HttpContext.Session.SetInt32("LoginStatus", customer.Status);
+
+                if (customer.Level == 1)
                 {
                     ViewBag.log = 1;
                     return View();
                 }
                 else
                 {
+                    //HttpContext.Session.SetString("Name", customer.LastName);
                     ViewBag.log = 2;
                     return RedirectToAction("Users", "Admin");
                 }
@@ -115,22 +127,46 @@ namespace SaleApp.Controllers
             {
                 return View();
             }
-            string passHash;
-            using (MD5 md5Hash = MD5.Create())
+            if (_serviceCustomer.GetUser(model.Mail) == true)
             {
-                passHash = MD5Hash.GetMd5Hash(md5Hash, model.Password);
+                ViewBag.check = 0;
+                return View();
             }
-
-            SaveUserDto saveUserDto = new SaveUserDto()
+            else
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Mail = model.Mail,
-                Password = passHash
-            };
+                string passHash;
+                using (MD5 md5Hash = MD5.Create())
+                {
+                    passHash = MD5Hash.GetMd5Hash(md5Hash, model.Password);
+                }
 
-            _serviceCustomer.Add(saveUserDto);
-            ViewBag.check = 1;
+                SaveUserDto saveUserDto = new SaveUserDto()
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Mail = model.Mail,
+                    Password = passHash
+                };
+
+                _serviceCustomer.Add(saveUserDto);
+                ViewBag.check = 1;
+                return View();
+            }
+        }
+
+        public IActionResult Logout()
+        { 
+            HttpContext.Session.Remove("LoginID");
+            HttpContext.Session.Remove("LoginName");
+            HttpContext.Session.Remove("LoginMail");
+            HttpContext.Session.Remove("LoginLevel");
+            HttpContext.Session.Remove("LoginStatus");
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Contact()
+        {
             return View();
         }
     }

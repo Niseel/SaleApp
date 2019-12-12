@@ -9,5 +9,7 @@ namespace SaleApp.Interfaces
     public interface IBrandIndexVmService
     {
         IndexVm GetBrandListVm(string searchString, int pageIndex = 1);
+        BrandCreateVm GetList();
+        BrandEditVm GetEditList();
     }
 }

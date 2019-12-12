@@ -1,10 +1,9 @@
 ﻿@model SaleApp.ViewModels.CategoryEditVm
 
 @{
-    ViewData["Title"] = "Edit";    
-    var photoPath = "~/images/categories/" + (Model.ExistPhotoPath ?? "default.png");
+    ViewData["Title"] = "Edit";
+    var photoPath = "~/images/brands/" + (Model.ExistPhotoPath ?? "default.png");
 }
-
 <h1>Edit</h1>
 
 <h4>Categories</h4>
@@ -17,16 +16,25 @@
             <input type="hidden" asp-for="ExistPhotoPath" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" required />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+            @if (ViewBag.CategoryNameEditDuplicateErrorMessage != null)
+            {
+                <div class="alert alert-error text-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <p><strong>Warning!</strong> The category name cannot be changed due to the same name as the existing category!</p>
+                </div>
+            }
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
+                <select asp-for="Status" asp-items="ViewBag.StatusList" class="form-control">
+                </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">

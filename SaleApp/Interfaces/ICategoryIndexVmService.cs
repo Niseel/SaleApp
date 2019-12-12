@@ -9,5 +9,6 @@ namespace SaleApp.Interfaces
     public interface ICategoryIndexVmService
     {
         IndexVm GetCategoryListVm(int pageIndex = 1);
+        CategoryCreateVm GetList();
     }
 }

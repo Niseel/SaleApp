@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,13 +32,16 @@ namespace SaleApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.Configure<RazorViewEngineOptions>(options =>
+            //services.AddSession(options =>
             //{
-            //    options.AreaViewLocationFormats.Clear();
-            //    options.AreaViewLocationFormats.Add("/Admin/{2}/Views/{1}/{0}.cshtml");
-            //    options.AreaViewLocationFormats.Add("/Admin/{2}/Views/Shared/{0}.cshtml");
-            //    options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+            //    options.IdleTimeout = TimeSpan.FromSeconds(3600);
             //});
+            services.AddDistributedMemoryCache();           // Đăng ký dịch vụ lưu cache trong bộ nhớ (Session sẽ sử dụng nó)
+            services.AddSession(cfg =>
+            {                    // Đăng ký dịch vụ Session
+                                 // Đặt tên Session - tên này sử dụng ở Browser (Cookie)
+                cfg.IdleTimeout = new TimeSpan(0, 60, 0);    // Thời gian tồn tại của Session
+            });
 
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<IBrandService, BrandService>();
@@ -60,7 +63,6 @@ namespace SaleApp
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(typeof(MappingProfile));
-
             services.AddMvc(option => option.EnableEndpointRouting = false);
 
 
@@ -82,6 +84,7 @@ namespace SaleApp
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            app.UseSession();
             app.UseStaticFiles();
 
             app.UseRouting();

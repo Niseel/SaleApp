@@ -8,6 +8,7 @@ namespace ApplicationCore.Interfaces
     public interface IUserService
     {
         UserDto GetUser(int id);
+        bool GetUser(string mail);
         UserDto GetUser(string mail, string password);
         IEnumerable<UserDto> GetAll();
         IEnumerable<UserDto> GetAllUser(string searchString, int? status);

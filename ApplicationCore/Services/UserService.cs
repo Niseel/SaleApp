@@ -63,5 +63,10 @@ namespace ApplicationCore.Services
         {
             return _unitOfWork.Users.GetUser(mail, password);
         }
+        public bool GetUser(string mail)
+        {
+            var user = _unitOfWork.Users.GetUser(mail);
+            return user != null ? true : false;
+        }
     }
 }

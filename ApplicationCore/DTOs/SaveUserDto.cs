@@ -29,7 +29,7 @@ namespace ApplicationCore.DTOs
 
         [Required(ErrorMessage = "Please input birth")]
         [Column(TypeName = "datetime2")]
-        public string Birth { get; set; }
+        public DateTime Birth { get; set; }
 
         [Column(TypeName = "nvarchar")]
         public string Phone { get; set; }

@@ -18,6 +18,15 @@ namespace SaleApp.Services
             _service = userService;
         }
 
+        public int GetAge(DateTime birthDate)
+        {
+            DateTime today = DateTime.Today;
+            int age = today.Year - birthDate.Year;
+            if (birthDate > today.AddYears(-age))
+                age--;
+            return age;
+        }
+
         public UserCreateVm GetList()
         {
             return new UserCreateVm

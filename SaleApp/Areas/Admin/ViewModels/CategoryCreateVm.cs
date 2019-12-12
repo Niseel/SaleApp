@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -20,5 +21,6 @@ namespace SaleApp.ViewModels
         [Column(TypeName = "smallint")]
         public int Status { get; set; }
         public IFormFile Photo { get; set; }
+        public SelectList StatusList { get; set; }
     }
 }

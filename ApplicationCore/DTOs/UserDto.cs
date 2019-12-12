@@ -26,6 +26,7 @@ namespace ApplicationCore.DTOs
         public string Password { get; set; }
         [Required]
         [Display(Name = "Ngày Sinh")]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Birth { get; set; }
         [Required]
         [Display(Name = "Số Điện Thoại")]
