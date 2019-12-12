@@ -1,14 +1,11 @@
 ﻿@{
     ViewData["Title"] = "Home Page Admin";
 }
-@{
 
-}
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Admin page <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+        <p>Admin page <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>
 
-Hello @Context.Session.GetString("LoginName");
-
+    Hello @Context.Session.GetString("LoginName");
 

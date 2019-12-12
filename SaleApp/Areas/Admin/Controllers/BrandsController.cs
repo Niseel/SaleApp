@@ -8,6 +8,7 @@ using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,11 @@ namespace SaleApp.Controllers
         //public BrandIndexVm BrandIndexVM { get; set; }
         public IActionResult Index(string searchString, int pageIndex = 1)
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             IndexVm BrandIndexVM = _brandService.GetBrandListVm(searchString, pageIndex);
             return View(BrandIndexVM);
         }
@@ -119,6 +125,11 @@ namespace SaleApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             var x = _brandService.GetList();
             ViewBag.StatusList = x.StatusList;
             return View();
@@ -127,6 +138,11 @@ namespace SaleApp.Controllers
         [Obsolete]
         public IActionResult Create(BrandCreateVm model)
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             if (!ModelState.IsValid)
             {
                 var x = _brandService.GetList();
@@ -162,6 +178,11 @@ namespace SaleApp.Controllers
         [HttpGet]
         public IActionResult Detail(int? id)
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -180,6 +201,11 @@ namespace SaleApp.Controllers
         [HttpGet]
         public IActionResult Edit(int? id)
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -211,6 +237,11 @@ namespace SaleApp.Controllers
         [Obsolete]
         public IActionResult Edit(BrandEditVm model)
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             if (ModelState.IsValid)
             {
                 var brands = _service.GetAll();

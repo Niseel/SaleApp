@@ -8,6 +8,7 @@ using ApplicationCore.DTOs;
 using ApplicationCore.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SaleApp.Interfaces;
 using SaleApp.ViewModels;
@@ -33,6 +34,11 @@ namespace SaleApp.Controllers
         }
         public IActionResult Index(string searchString, int pageIndex = 1, int pageSize = 5, int? status = null)
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             IndexVm UserIndexVM = _userService.GetUserListVm(searchString, pageIndex, pageSize, status);
             ViewBag.pageSize = pageSize;
             ViewBag.status = status;
@@ -41,6 +47,11 @@ namespace SaleApp.Controllers
         [Area("Admin")]
         public IActionResult Detail(int? id)
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -59,6 +70,11 @@ namespace SaleApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             var x = _userService.GetList();
             ViewBag.StatusList = x.StatusList;
             return View();
@@ -67,6 +83,11 @@ namespace SaleApp.Controllers
         [Obsolete]
         public IActionResult Create(UserCreateVm model)
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             if (!ModelState.IsValid)
             {
                 var x = _userService.GetList();
@@ -145,6 +166,11 @@ namespace SaleApp.Controllers
         [HttpGet]
         public IActionResult Edit(int? id)
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -181,6 +207,11 @@ namespace SaleApp.Controllers
         [Obsolete]
         public IActionResult Edit(UserEditVm model)
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             if (!ModelState.IsValid)
             {
                 var x = _userService.GetList();
@@ -234,8 +265,37 @@ namespace SaleApp.Controllers
                 saveUserDto.AvtPath = ProcessUploadedFile(model);
             }
             _service.Update(saveUserDto);
-            return View("Detail", _service.GetUser(saveUserDto.ID));
+            return RedirectToAction("Detail", _service.GetUser(saveUserDto.ID));
         }
+        public IActionResult ResetPassword(int? id)
+        {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            UserDto userDto = _service.GetUser(id.Value);
+            if (userDto == null)
+            {
+                return NotFound();
+            }
+            string passHash;
+            using (MD5 md5Hash = MD5.Create())
+            {
+                passHash = MD5Hash.GetMd5Hash(md5Hash, "123456");
+            }
+
+            SaveUserDto saveUserDto = _mapper.Map<UserDto, SaveUserDto>(userDto);
+            saveUserDto.Password = passHash;
+            _service.Update(saveUserDto);
+            return View("Thanks");
+        }
+
 
         [Obsolete]
         private string ProcessUploadedFile(UserCreateVm model)

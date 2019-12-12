@@ -361,3 +361,7 @@ C:\Users\THANH\source\repository\SaleApp\obj\Debug\netcoreapp3.0\SaleApp.pdb
 C:\Users\THANH\source\repository\SaleApp\obj\Debug\netcoreapp3.0\Razor\Views\Home\Login.cshtml.g.cs
 C:\Users\THANH\source\repository\SaleApp\obj\Debug\netcoreapp3.0\SaleApp.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\THANH\source\repository\SaleApp\obj\Debug\netcoreapp3.0\Razor\Views\Home\Contact.cshtml.g.cs
+C:\Users\THANH\source\repository\SaleApp\obj\Debug\netcoreapp3.0\Razor\Views\Home\Cart.cshtml.g.cs
+C:\Users\THANH\source\repository\SaleApp\obj\Debug\netcoreapp3.0\Razor\Views\Home\AddCart.cshtml.g.cs
+C:\Users\THANH\source\repository\SaleApp\obj\Debug\netcoreapp3.0\Razor\Areas\Admin\Views\Users\Thanks.cshtml.g.cs
+C:\Users\THANH\source\repository\SaleApp\obj\Debug\netcoreapp3.0\Razor\Views\Home\Profile.cshtml.g.cs

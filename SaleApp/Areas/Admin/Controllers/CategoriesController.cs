@@ -8,6 +8,7 @@ using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,11 @@ namespace SaleApp.Controllers
         }
         public IActionResult Index(int pageIndex = 1)
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             IndexVm CategoryIndexVM = _categoryService.GetCategoryListVm(pageIndex);
             return View(CategoryIndexVM); 
         }
@@ -43,6 +49,11 @@ namespace SaleApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             var x = _categoryService.GetList();
             ViewBag.StatusList = x.StatusList;
             return View();
@@ -51,6 +62,11 @@ namespace SaleApp.Controllers
         [Obsolete]
         public IActionResult Create(CategoryCreateVm model)
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             if (!ModelState.IsValid)
             {
                 var x = _categoryService.GetList();
@@ -89,6 +105,11 @@ namespace SaleApp.Controllers
         [HttpGet]
         public IActionResult Detail(int? id)
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -107,6 +128,11 @@ namespace SaleApp.Controllers
         [HttpGet]
         public IActionResult Edit(int? id)
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -137,6 +163,11 @@ namespace SaleApp.Controllers
         [Obsolete]
         public IActionResult Edit(CategoryEditVm model)
         {
+            if (HttpContext.Session.GetInt32("LoginLevel") != 2)
+            {
+                ViewBag.checkLogin = 0;
+                return View("../Home/AddCart");
+            }
             if (ModelState.IsValid)
             {
                 var categories = _service.GetAll();

@@ -1,0 +1,12 @@
+﻿check = @ViewBag.checkLogin
+@if (ViewBag.checkLogin == 0)
+{
+    @section Scripts {
+        <script>
+            var r = confirm("You not You are not logged in, please login to perform this feature");
+            if (r == true) {
+                window.location.href = "/Home/Login";
+            }
+        </script>
+    }
+}
